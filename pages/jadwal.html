@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Jadwal Hari Ini - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="jadwal" class="active">Jadwal</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Jadwal <span class="gradient-text">Hari Ini</span></h1>
+            <p>Atur pengingat dan jadwal kegiatanmu. Tandai yang sudah selesai agar harimu tetap teratur.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Jadwal</div>
+        </div>
+    </section>
+
+    <section class="dashboard">
+        <div class="container">
+            <!-- Tamu (belum login) -->
+            <div class="auth-box login-wajib" id="loginWajib" hidden>
+                <h2><i class="fas fa-lock"></i> Jadwal Pribadi</h2>
+                <p>Masuk untuk membuat jadwal & pengingat kegiatan harianmu. Semua jadwal tersimpan aman di akunmu.</p>
+                <div class="aksi">
+                    <a href="masuk" class="btn btn-secondary">Masuk</a>
+                    <a href="daftar" class="btn btn-primary">Daftar Gratis</a>
+                </div>
+            </div>
+
+            <!-- Isi jadwal (setelah login & data dimuat) -->
+            <div id="isiJadwal" hidden>
+                <div class="section-header">
+                    <span class="section-badge"><i class="fas fa-calendar-day"></i> Agenda</span>
+                    <h2>Kegiatan <span class="gradient-text">Hari Ini</span></h2>
+                    <p id="jadwalSub">Memuat jadwal…</p>
+                </div>
+
+                <!-- Ringkasan -->
+                <div class="ringkas-jadwal">
+                    <div class="kotak-jadwal"><span>Total Jadwal</span><strong id="rTotal">0</strong></div>
+                    <div class="kotak-jadwal"><span>Selesai</span><strong id="rSelesai">0</strong></div>
+                    <div class="kotak-jadwal"><span>Belum</span><strong id="rBelum">0</strong></div>
+                    <div class="kotak-jadwal"><span>Berikutnya</span><strong id="rBerikut">—</strong></div>
+                </div>
+
+                <div class="panel-grid">
+                    <!-- Form tambah jadwal -->
+                    <div class="panel form-box">
+                        <h2><i class="fas fa-plus-circle"></i> Tambah Jadwal</h2>
+                        <p>Buat pengingat kegiatan: sekali, setiap hari, atau mingguan.</p>
+                        <form id="formJadwal" novalidate>
+                            <div class="form-group">
+                                <label for="jJudul">Nama kegiatan</label>
+                                <input type="text" id="jJudul" name="judul" maxlength="120" placeholder="cth: Minum obat / Olahraga pagi" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="jWaktu">Waktu</label>
+                                    <input type="time" id="jWaktu" name="waktu" value="07:00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jKategori">Kategori</label>
+                                    <select id="jKategori" name="kategori">
+                                        <option>Umum</option>
+                                        <option>Kesehatan</option>
+                                        <option>Olahraga</option>
+                                        <option>Makan</option>
+                                        <option>Obat</option>
+                                        <option>Istirahat</option>
+                                        <option>Kerja</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="jUlangi">Ulangi</label>
+                                    <select id="jUlangi" name="ulangi">
+                                        <option value="harian">Setiap hari</option>
+                                        <option value="sekali">Sekali (tanggal tertentu)</option>
+                                        <option value="mingguan">Mingguan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="grupTanggal" hidden>
+                                    <label for="jTanggal">Tanggal</label>
+                                    <input type="date" id="jTanggal" name="tanggal">
+                                </div>
+                                <div class="form-group" id="grupHari" hidden>
+                                    <label for="jHari">Hari</label>
+                                    <select id="jHari" name="hari">
+                                        <option value="1">Minggu</option>
+                                        <option value="2">Senin</option>
+                                        <option value="3">Selasa</option>
+                                        <option value="4">Rabu</option>
+                                        <option value="5">Kamis</option>
+                                        <option value="6">Jumat</option>
+                                        <option value="7">Sabtu</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="jCatatan">Catatan <span class="opsional">opsional</span></label>
+                                <input type="text" id="jCatatan" name="catatan" maxlength="255" placeholder="cth: 1 tablet setelah makan">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+                                <i class="fas fa-save"></i> Simpan Jadwal
+                            </button>
+                            <div class="form-msg" id="jadwalMsg"></div>
+                        </form>
+                    </div>
+
+                    <!-- Pengingat -->
+                    <div class="panel">
+                        <h2><i class="fas fa-bell"></i> Pengingat</h2>
+                        <p>Aktifkan agar browser memberitahu saat waktunya tiba. Halaman ini perlu tetap terbuka.</p>
+                        <div class="habit-score" id="reminderInfo" style="margin-bottom:15px;">
+                            Pengingat <strong>nonaktif</strong>.
+                        </div>
+                        <button id="btnReminder" class="btn btn-primary"><i class="fas fa-bell"></i> Aktifkan Pengingat Jadwal</button>
+                        <div class="form-msg" id="reminderMsg"></div>
+                    </div>
+                </div>
+
+                <!-- Daftar jadwal hari ini -->
+                <div class="panel panel-penuh">
+                    <h2><i class="fas fa-list-check"></i> Daftar Jadwal Hari Ini</h2>
+                    <p id="hariLabel">—</p>
+                    <ul class="timeline" id="daftarJadwal"></ul>
+                </div>
+
+                <!-- Jadwal mendatang (sekali) -->
+                <div class="panel panel-penuh" id="panelMendatang" hidden>
+                    <h2><i class="fas fa-calendar-plus"></i> Jadwal Mendatang</h2>
+                    <p>Jadwal sekali yang akan datang.</p>
+                    <div class="tabel-geser">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr><th>Tanggal</th><th>Waktu</th><th>Kegiatan</th><th>Kategori</th><th>Aksi</th></tr>
+                            </thead>
+                            <tbody id="mendatangBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/jadwal.js?v=5"></script>
+</body>
+</html>

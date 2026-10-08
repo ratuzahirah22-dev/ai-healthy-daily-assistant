@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Profil - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Profil <span class="gradient-text">Saya</span></h1>
+            <p>Kelola data diri dan akunmu di sini.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Profil</div>
+        </div>
+    </section>
+
+    <section class="dashboard">
+        <div class="container">
+            <div class="panel" style="max-width:640px;margin:0 auto">
+                <h2><i class="fas fa-user-edit"></i> Data Profil</h2>
+
+                <div class="profil-foto-row">
+                    <img id="profilAvatar" class="profil-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ctext x='50' y='58' font-size='40' text-anchor='middle' fill='%239ca3af'%3E%3F%3C/text%3E%3C/svg%3E" alt="Foto profil">
+                    <div>
+                        <label for="profilFoto" class="btn btn-secondary" style="display:inline-block;cursor:pointer">
+                            <i class="fas fa-camera"></i> Pilih Foto
+                        </label>
+                        <input type="file" id="profilFoto" accept="image/jpeg,image/png,image/webp" style="display:none">
+                        <p id="fotoHint" style="color:var(--text-light); font-size:0.82rem; margin-top:8px;">Format JPEG/PNG/WebP, otomatis diperkecil &lt; 300px.</p>
+                        <p id="fotoMsg" class="form-msg"></p>
+                    </div>
+                </div>
+
+                <form id="formProfil">
+                    <div class="form-group"><label>Nama</label><input type="text" id="profilNama" required></div>
+                    <div class="form-group"><label>Jenis Kelamin</label>
+                        <select id="profilJK">
+                            <option value="">—</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Tanggal Lahir</label><input type="date" id="profilLahir"></div>
+                    <p class="form-hint" id="umurInfo">Isi tanggal lahir agar target air, kalori, langkah, dan tidur dihitung sesuai umurmu.</p>
+                    <div class="form-group"><label>Tinggi (cm)</label><input type="number" id="profilTinggi" min="50" max="250"></div>
+                    <div class="form-group"><label>Berat (kg)</label><input type="number" id="profilBerat" min="10" max="300"></div>
+                    <button class="btn btn-primary" type="submit">Simpan Profil</button>
+                    <p id="profilMsg" class="form-msg"></p>
+                </form>
+            </div>
+
+            <div class="panel" style="max-width:640px;margin:2rem auto">
+                <h2><i class="fas fa-lock"></i> Ganti Password</h2>
+                <form id="formPassword">
+                    <div class="form-group"><label>Password Lama</label><input type="password" id="passLama" required></div>
+                    <div class="form-group"><label>Password Baru</label><input type="password" id="passBaru" required minlength="6"></div>
+                    <button class="btn btn-primary" type="submit">Ganti Password</button>
+                    <p id="passMsg" class="form-msg"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script>
+      App.ready.then(function (user) {
+        if (!user) { window.location.href = 'masuk'; return; }
+        document.getElementById('profilNama').value = user.nama || '';
+        document.getElementById('profilJK').value = user.jenis_kelamin || '';
+        document.getElementById('profilLahir').value = user.tanggal_lahir || '';
+        document.getElementById('profilTinggi').value = user.tinggi_cm || '';
+        document.getElementById('profilBerat').value = user.berat_kg || '';
+        if (user.foto) document.getElementById('profilAvatar').src = user.foto;
+        perbaruiUmur();
+      });
+
+      // Tampilkan umur hasil hitungan saat tanggal lahir diisi
+      function hitungUmur(tgl) {
+        if (!tgl) return null;
+        var lahir = new Date(tgl + 'T00:00:00');
+        if (isNaN(lahir.getTime())) return null;
+        var kini = new Date();
+        var u = kini.getFullYear() - lahir.getFullYear();
+        var m = kini.getMonth() - lahir.getMonth();
+        if (m < 0 || (m === 0 && kini.getDate() < lahir.getDate())) u--;
+        return (u >= 0 && u <= 120) ? u : null;
+      }
+      function perbaruiUmur() {
+        var u = hitungUmur(document.getElementById('profilLahir').value);
+        var info = document.getElementById('umurInfo');
+        info.textContent = (u === null)
+          ? 'Isi tanggal lahir agar target air, kalori, langkah, dan tidur dihitung sesuai umurmu.'
+          : 'Umur kamu ' + u + ' tahun. Target kesehatanmu akan menyesuaikan umur ini.';
+      }
+      document.getElementById('profilLahir').addEventListener('change', perbaruiUmur);
+
+      // Unggah foto: kecilkan via canvas lalu kirim base64 ke server
+      document.getElementById('profilFoto').addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const msg = document.getElementById('fotoMsg');
+        const reader = new FileReader();
+        reader.onload = function () {
+          const img = new Image();
+          img.onload = async function () {
+            const max = 300;
+            const scale = Math.min(1, max / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            try {
+              const r = await App.api('/api/auth/foto', 'POST', { foto: dataUrl });
+              document.getElementById('profilAvatar').src = r.url;
+              // Perbarui juga avatar di navbar agar langsung terlihat
+              const navLink = document.querySelector('.nav-user');
+              if (navLink) {
+                let img = navLink.querySelector('img');
+                if (!img) {
+                  img = document.createElement('img');
+                  img.style.cssText = 'width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);';
+                  const icon = navLink.querySelector('i');
+                  if (icon) icon.remove();
+                  navLink.insertBefore(img, navLink.firstChild);
+                }
+                img.src = r.url;
+              }
+              App.tampilPesan(msg, r.pesan, true);
+            } catch (err) { App.tampilPesan(msg, err.message, false); }
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+      document.getElementById('formProfil').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        try {
+          const r = await App.api('/api/auth/profile', 'PUT', {
+            nama: document.getElementById('profilNama').value,
+            jenis_kelamin: document.getElementById('profilJK').value,
+            tanggal_lahir: document.getElementById('profilLahir').value,
+            tinggi_cm: document.getElementById('profilTinggi').value,
+            berat_kg: document.getElementById('profilBerat').value
+          });
+          App.tampilPesan(document.getElementById('profilMsg'), r.pesan, true);
+        } catch (err) { App.tampilPesan(document.getElementById('profilMsg'), err.message, false); }
+      });
+      document.getElementById('formPassword').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        try {
+          const r = await App.api('/api/auth/password', 'POST', {
+            password_lama: document.getElementById('passLama').value,
+            password_baru: document.getElementById('passBaru').value
+          });
+          App.tampilPesan(document.getElementById('passMsg'), r.pesan, true);
+          e.target.reset();
+        } catch (err) { App.tampilPesan(document.getElementById('passMsg'), err.message, false); }
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>AI Daily Healthy Assistant - Sehatkan Hidupmu, Sehatkan Masa Depanmu</title>
+    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="index" class="active">Beranda</a></li>
+                <li><a href="pages/kesehatan">Kesehatan</a></li>
+                <li><a href="pages/chatbot">Chat Bot</a></li>
+                <li><a href="pages/tentang">Tentang</a></li>
+                <li><a href="pages/jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-robot"></i> AI-Powered Health Assistant
+            </div>
+            <h1>AI Daily Healthy<br><span class="gradient-text">Assistant</span></h1>
+            <p class="hero-slogan">"Sehatkan Hidupmu, Sehatkan Masa Depanmu"</p>
+            <p class="hero-description">
+                Asisten kesehatan berbasis AI yang membantu Anda mengelola pola hidup sehat setiap hari. 
+                Pantau kesehatan, dapatkan tips personal, dan konsultasi langsung melalui chat bot cerdas.
+            </p>
+            <div class="hero-buttons">
+                <a href="pages/chatbot" class="btn btn-primary">
+                    <i class="fas fa-comments"></i> Mulai Chat
+                </a>
+                <a href="pages/kesehatan" class="btn btn-secondary">
+                    <i class="fas fa-chart-line"></i> Mulai Pantau
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <span class="stat-number" id="statPengguna">–</span>
+                        <span class="stat-label">Pengguna Terdaftar</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <span class="stat-number" id="statKonsultasi">–</span>
+                        <span class="stat-label">Konsultasi</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <span class="stat-number" id="statRating">–</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="health-circle">
+                <div class="circle-inner">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Sehat</span>
+                </div>
+                <div class="orbit orbit-1">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <div class="orbit orbit-2">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <div class="orbit orbit-3">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="orbit orbit-4">
+                    <i class="fas fa-tint"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-magic"></i> Fitur Unggulan</span>
+                <h2>Yang Kami <span class="gradient-text">Tawarkan</span></h2>
+                <p>Berbagai fitur canggih untuk membantu Anda menjalani pola hidup sehat</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Chat Bot</h3>
+                    <p>Konsultasi kesehatan 24/7 dengan AI cerdas yang memberikan saran personal berdasarkan kondisi Anda.</p>
+                    <a href="pages/chatbot" class="feature-link">
+                        Mulai Chat <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-green">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Tracking Kesehatan</h3>
+                    <p>Pantau BMI, asupan air, kalori, dan aktivitas harian Anda dalam satu dashboard lengkap.</p>
+                    <a href="pages/kesehatan" class="feature-link">
+                        Lihat Dashboard <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-purple">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Rekomendasi Makanan</h3>
+                    <p>Dapatkan rekomendasi pola makan sehat yang disesuaikan dengan kebutuhan tubuh Anda.</p>
+                    <a href="pages/kesehatan#makanan" class="feature-link">
+                        Lihat Rekomendasi <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-orange">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>Jadwal Olahraga</h3>
+                    <p>Program olahraga terstruktur yang dirancang oleh ahli untuk berbagai tingkat kebugaran.</p>
+                    <a href="pages/kesehatan#olahraga" class="feature-link">
+                        Lihat Jadwal <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-blue">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3>Monitor Tidur</h3>
+                    <p>Analisis kualitas tidur Anda dan dapatkan tips untuk meningkatkan istirahat yang berkualitas.</p>
+                    <a href="pages/kesehatan#tidur" class="feature-link">
+                        Pelajari Lebih <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-red">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Kesehatan Mental</h3>
+                    <p>Latihan mindfulness, meditasi, dan manajemen stres untuk kesehatan mental yang optimal.</p>
+                    <a href="pages/kesehatan#mental" class="feature-link">
+                        Mulai Sekarang <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-lightbulb"></i> Cara Kerja</span>
+                <h2>Langkah <span class="gradient-text">Mudah</span></h2>
+                <p>Mulai perjalanan sehat Anda hanya dalam 3 langkah sederhana</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Buat Akun</h3>
+                    <p>Daftar secara gratis dan isi profil kesehatan Anda untuk pengalaman personal.</p>
+                </div>
+                <div class="step-connector">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Input Data</h3>
+                    <p>Masukkan data kesehatan harian seperti berat badan, asupan makanan, dan aktivitas.</p>
+                </div>
+                <div class="step-connector">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Dapatkan Hasil</h3>
+                    <p>Terima analisis AI dan rekomendasi personal untuk hidup yang lebih sehat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-quote-left"></i> Testimoni</span>
+                <h2>Apa Kata <span class="gradient-text">Mereka</span></h2>
+                <p>Cerita nyata dari pengguna yang telah merasakan manfaatnya</p>
+            </div>
+            <div class="testimonials-grid" id="testiGrid">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"AI Chat Bot-nya luar biasa! Selalu memberikan saran yang tepat dan personal. Sudah 3 bulan menggunakan dan berat badan saya turun 5 kg secara sehat."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <strong>Sari Dewi</strong>
+                            <span>Jakarta</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card featured">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"Fitur tracking kesehatannya sangat membantu saya memantau perkembangan. Dashboard-nya intuitif dan mudah digunakan. Sangat recommended!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <strong>Budi Santoso</strong>
+                            <span>Surabaya</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"Sejak pakai AI Healthy Assistant, pola tidur saya membaik drastis. Rekomendasi meditasinya juga sangat membantu mengurangi stres. Terima kasih!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <strong>Rina Wati</strong>
+                            <span>Bandung</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form ulasan: hanya tampil jika sudah login -->
+            <div class="review-box" id="reviewBox" hidden>
+                <div class="auth-box form-box">
+                    <h2><i class="fas fa-pen"></i> Tulis Ulasanmu</h2>
+                    <p>Ceritakan pengalamanmu. Ulasan baru akan menggantikan ulasanmu sebelumnya, lalu <strong>ditinjau admin</strong> sebelum tampil di halaman ini.</p>
+                    <form id="formUlasan" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ulasanRating">Rating</label>
+                                <select id="ulasanRating" name="rating">
+                                    <option value="5">★★★★★ (5)</option>
+                                    <option value="4">★★★★ (4)</option>
+                                    <option value="3">★★★ (3)</option>
+                                    <option value="2">★★ (2)</option>
+                                    <option value="1">★ (1)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ulasanKota">Kota <span class="opsional">opsional</span></label>
+                                <input type="text" id="ulasanKota" name="kota" maxlength="40" placeholder="cth: Makassar">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ulasanIsi">Ulasan</label>
+                            <textarea id="ulasanIsi" name="isi" maxlength="400" placeholder="Minimal 10 karakter..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Kirim Ulasan</button>
+                        <div class="form-msg" id="ulasanMsg"></div>
+                    </form>
+                </div>
+            </div>
+            <p class="review-prompt" id="reviewPrompt" hidden>Ingin menulis ulasan? <a href="pages/masuk">Masuk</a> atau <a href="pages/daftar">daftar</a> dulu.</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Siap Memulai Hidup Sehat?</h2>
+                <p>Bergabung dengan ribuan pengguna lainnya dan rasakan perubahan positif dalam hidup Anda.</p>
+                <div class="cta-buttons">
+                    <a href="pages/daftar" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Mulai Gratis Sekarang
+                    </a>
+                </div>
+                <p class="cta-note">Gratis untuk selamanya. Tanpa kartu kredit.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index" class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>AI Healthy</span>
+                    </a>
+                    <p>Asisten kesehatan berbasis AI untuk hidup yang lebih sehat dan bahagia.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Menu</h4>
+                    <ul>
+                        <li><a href="index">Beranda</a></li>
+                        <li><a href="pages/kesehatan">Kesehatan</a></li>
+                        <li><a href="pages/chatbot">Chat Bot</a></li>
+                        <li><a href="pages/tentang">Tentang</a></li>
+                        <li><a href="pages/jadwal">Jadwal</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Fitur</h4>
+                    <ul>
+                        <li><a href="pages/chatbot">AI Chat Bot</a></li>
+                        <li><a href="pages/kesehatan">BMI Calculator</a></li>
+                        <li><a href="pages/kesehatan#makanan">Rekomendasi Makanan</a></li>
+                        <li><a href="pages/kesehatan#olahraga">Jadwal Olahraga</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Newsletter</h4>
+                    <p>Dapatkan tips kesehatan mingguan langsung di inbox Anda.</p>
+                    <div class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="Email Anda">
+                        <button type="button" id="newsletterBtn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                    <p class="newsletter-msg" id="newsletterMsg"></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/theme.js?v=5"></script>
+    <script src="js/auth.js?v=5"></script>
+    <script src="js/beranda.js?v=5"></script>
+</body>
+</html>

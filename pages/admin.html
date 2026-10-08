@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Admin - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Dashboard <span class="gradient-text">Admin</span></h1>
+            <p>Pantau pengguna dan layanan Chatbot AI, serta atur pengaturannya.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Admin</div>
+        </div>
+    </section>
+
+    <section class="auth-section admin-section">
+        <div class="container">
+
+            <!-- Ditampilkan jika bukan admin -->
+            <div class="auth-box" id="tolak" hidden>
+                <h2><i class="fas fa-lock"></i> Akses Ditolak</h2>
+                <p id="tolakPesan">Halaman ini khusus admin.</p>
+                <a href="masuk" class="btn btn-primary" id="tolakMasuk">Masuk sebagai Admin</a>
+            </div>
+
+            <div id="areaAdmin" hidden>
+                <div class="admin-tabs" role="tablist">
+                    <button type="button" class="aktif" data-tab="ringkasan"><i class="fas fa-chart-pie"></i> Ringkasan</button>
+                    <button type="button" data-tab="pengguna"><i class="fas fa-users"></i> Pengguna &amp; Pemakaian</button>
+                    <button type="button" data-tab="ulasan"><i class="fas fa-star"></i> Ulasan <span class="badge-tunggu" id="badgeMenunggu" hidden>0</span></button>
+                    <button type="button" data-tab="chatbot"><i class="fas fa-robot"></i> Pengaturan Chatbot</button>
+                </div>
+
+                <!-- ===== TAB 1: RINGKASAN ===== -->
+                <div class="tab-isi" id="tab-ringkasan">
+                    <div class="status-bot" id="statusBot"></div>
+
+                    <div class="dashboard-grid">
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-blue"><i class="fas fa-users"></i></div></div>
+                            <h3>Total Pengguna</h3>
+                            <div class="dash-value" id="sTotal">–</div>
+                            <p class="dash-note" id="sBaru"></p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-green"><i class="fas fa-user-check"></i></div></div>
+                            <h3>Pengguna Aktif Hari Ini</h3>
+                            <div class="dash-value" id="sAktifHari">–</div>
+                            <p class="dash-note">Membuka website hari ini.</p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-teal"><i class="fas fa-calendar-week"></i></div></div>
+                            <h3>Pengguna Aktif 7 Hari</h3>
+                            <div class="dash-value" id="sAktif7">–</div>
+                            <p class="dash-note" id="sAktifPersen"></p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-purple"><i class="fas fa-comments"></i></div></div>
+                            <h3>Pengguna Chatbot AI</h3>
+                            <div class="dash-value" id="sPenggunaChat">–</div>
+                            <p class="dash-note" id="sPenggunaChat7"></p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-orange"><i class="fas fa-message"></i></div></div>
+                            <h3>Total Pertanyaan ke AI</h3>
+                            <div class="dash-value" id="sPesan">–</div>
+                            <p class="dash-note" id="sPesanHari"></p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-pink"><i class="fas fa-percent"></i></div></div>
+                            <h3>Pengguna yang Memakai Chatbot</h3>
+                            <div class="dash-value" id="sPersenChat">–</div>
+                            <p class="dash-note">Dari seluruh pengguna terdaftar.</p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-orange"><i class="fas fa-coins"></i></div></div>
+                            <h3>Total Token Terpakai</h3>
+                            <div class="dash-value" id="sTokenTotal">–</div>
+                            <p class="dash-note" id="sTokenHari"></p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-blue"><i class="fas fa-calendar-days"></i></div></div>
+                            <h3>Token 7 Hari Terakhir</h3>
+                            <div class="dash-value" id="sToken7">–</div>
+                            <p class="dash-note">Pemakaian token seminggu terakhir.</p>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-top"><div class="dash-icon bg-teal"><i class="fas fa-gauge"></i></div></div>
+                            <h3>Rata-rata Token per Pertanyaan</h3>
+                            <div class="dash-value" id="sTokenRata">–</div>
+                            <p class="dash-note">Pertanyaan + jawaban + konteks.</p>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-penuh">
+                        <h2><i class="fas fa-chart-column"></i> Pertanyaan ke Chatbot — 7 Hari Terakhir</h2>
+                        <p>Arahkan kursor ke sebuah batang untuk melihat jumlah token hari itu.</p>
+                        <div class="grafik" id="grafik"></div>
+                    </div>
+                </div>
+
+                <!-- ===== TAB 2: PENGGUNA & CHAT ===== -->
+                <div class="tab-isi" id="tab-pengguna" hidden>
+                    <div class="panel panel-penuh">
+                        <h2><i class="fas fa-users"></i> Pemakaian Chatbot per Pengguna</h2>
+                        <p>Admin hanya melihat jumlah pemakaian (pertanyaan &amp; token), <strong>bukan isi percakapan</strong> pengguna.</p>
+                        <div class="filter-baris">
+                            <input type="search" id="cari" placeholder="Cari nama atau email...">
+                            <select id="urut">
+                                <option value="aktif">Urut: terakhir aktif</option>
+                                <option value="token">Urut: token terbanyak</option>
+                                <option value="pesan">Urut: pertanyaan terbanyak</option>
+                            </select>
+                            <label class="saklar kecil"><input type="checkbox" id="hanyaChat"> <span>Hanya pengguna chatbot</span></label>
+                        </div>
+                        <div class="tabel-geser">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr><th>Nama</th><th>Email</th><th>Terakhir Aktif</th><th>Pertanyaan AI</th><th>Token Total</th><th>Token 7 Hari</th><th>Aksi</th></tr>
+                                </thead>
+                                <tbody id="penggunaBody"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Panel reset password: tersembunyi sampai tombol "Reset password" diklik -->
+                        <div class="panel panel-penuh" id="panelReset" hidden>
+                            <h2 id="judulReset"></h2>
+                            <form id="formReset" novalidate>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="inResetPass">Password baru (6–72 karakter)</label>
+                                        <input type="text" id="inResetPass" maxlength="72" autocomplete="off"
+                                               placeholder="Tulis atau buatkan password acak">
+                                    </div>
+                                    <div class="form-group form-aksi">
+                                        <button type="button" class="btn btn-secondary" id="btnBuatPass">
+                                            <i class="fas fa-dice"></i> Buatkan acak
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-aksi-ganda">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Simpan password baru</button>
+                                    <button type="button" class="btn btn-secondary" id="btnBatalReset">Batal</button>
+                                </div>
+                                <p id="msgReset" class="form-msg"></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== TAB 3: MODERASI ULASAN ===== -->
+                <div class="tab-isi" id="tab-ulasan" hidden>
+                    <div class="panel panel-penuh">
+                        <h2><i class="fas fa-star"></i> Moderasi Ulasan Pengguna</h2>
+                        <p>Ulasan yang dikirim pengguna <strong>tidak langsung tampil di beranda</strong>. Tinjau dulu: setujui agar tampil publik, simpan sebagai draft, atau tolak agar disembunyikan. Hanya berstatus <strong>Tampil</strong> yang muncul di beranda.</p>
+                        <div class="ringkas-ulasan" id="ringkasUlasan"></div>
+                        <div class="filter-baris">
+                            <input type="search" id="cariUlasan" placeholder="Cari nama, kota, atau isi ulasan...">
+                            <select id="filterStatus">
+                                <option value="">Semua status</option>
+                                <option value="menunggu">Menunggu ditinjau</option>
+                                <option value="draft">Draft (disimpan, belum tampil)</option>
+                                <option value="diterima">Sudah tampil</option>
+                                <option value="ditolak">Ditolak</option>
+                            </select>
+                            <label class="saklar kecil"><input type="checkbox" id="hanyaMenunggu"> <span>Hanya yang menunggu</span></label>
+                        </div>
+                        <div class="tabel-geser">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr><th>Pengirim</th><th>Ulasan</th><th>Rating</th><th>Status</th><th>Dikirim</th><th>Aksi</th></tr>
+                                </thead>
+                                <tbody id="ulasanBody"></tbody>
+                            </table>
+                        </div>
+                        <p class="form-msg" id="ulasanMsg"></p>
+                    </div>
+                </div>
+
+                <!-- ===== TAB 4: PENGATURAN CHATBOT ===== -->
+                <div class="tab-isi" id="tab-chatbot" hidden>
+                    <div class="auth-box form-box admin-box">
+                        <h2><i class="fas fa-robot"></i> Pengaturan Chatbot AI</h2>
+                        <p>Kompatibel dengan layanan gaya OpenAI: OpenAI, OpenRouter, Groq, Together, Ollama/LM Studio, dll.</p>
+
+                        <form id="formAdmin" novalidate>
+                            <label class="saklar">
+                                <input type="checkbox" id="aktif">
+                                <span><strong>Aktifkan Live Chat AI</strong> untuk semua pengguna</span>
+                            </label>
+                            <p class="status-kunci" id="statusKunci"></p>
+
+                            <div class="form-group">
+                                <label for="apiKey">API Key</label>
+                                <input type="password" id="apiKey" placeholder="Kosongkan jika tidak ingin mengubah" autocomplete="off">
+                                <label class="saklar kecil" id="barisHapusKey" hidden>
+                                    <input type="checkbox" id="hapusKey"> <span>Hapus API key yang tersimpan</span>
+                                </label>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="baseUrl">Base URL</label>
+                                    <input type="text" id="baseUrl" placeholder="https://api.openai.com/v1" maxlength="200">
+                                </div>
+                                <div class="form-group">
+                                    <label for="model">Model</label>
+                                    <input type="text" id="model" placeholder="cth: gpt-4o-mini" maxlength="100">
+                                </div>
+                            </div>
+                            <p class="api-hint">Contoh Base URL: OpenAI <code>https://api.openai.com/v1</code> • OpenRouter <code>https://openrouter.ai/api/v1</code> • Ollama lokal <code>http://localhost:11434/v1</code></p>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="temperature">Temperature (0–2)</label>
+                                    <input type="number" id="temperature" min="0" max="2" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxTokens">Panjang jawaban maks. (token)</label>
+                                    <input type="number" id="maxTokens" min="50" max="4000" step="50">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prompt">Prompt Sistem (kepribadian &amp; aturan Dokter AI)</label>
+                                <textarea id="prompt" rows="8" maxlength="4000"></textarea>
+                                <button type="button" class="link-btn" id="btnBawaan">Kembalikan prompt bawaan</button>
+                            </div>
+
+                            <div class="aksi-admin">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Pengaturan</button>
+                                <button type="button" class="btn btn-secondary" id="btnTes"><i class="fas fa-vial"></i> Tes Koneksi</button>
+                            </div>
+                            <div class="form-msg" id="adminMsg"></div>
+                            <div class="hasil-tes" id="hasilTes" hidden></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/admin.js?v=5"></script>
+</body>
+</html>

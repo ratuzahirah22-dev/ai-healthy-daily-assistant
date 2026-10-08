@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Masuk - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Selamat <span class="gradient-text">Datang Kembali</span></h1>
+            <p>Masuk untuk melihat dan menyimpan data kesehatan harianmu.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Masuk</div>
+        </div>
+    </section>
+
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-box form-box">
+                <h2><i class="fas fa-sign-in-alt"></i> Masuk</h2>
+                <p>Gunakan email dan password yang kamu daftarkan.</p>
+                <form id="formMasuk" novalidate>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="nama@email.com" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Password kamu" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+                    <div class="form-msg" id="formMsg"></div>
+                </form>
+                <p class="auth-switch">Belum punya akun? <a href="daftar">Daftar gratis</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/form-akun.js?v=5"></script>
+</body>
+</html>

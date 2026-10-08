@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Daftar - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Buat <span class="gradient-text">Akun Baru</span></h1>
+            <p>Gratis dan mudah. Data kesehatanmu akan tersimpan dan bisa dilihat kapan saja.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Daftar</div>
+        </div>
+    </section>
+
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-box form-box">
+                <h2><i class="fas fa-user-plus"></i> Daftar</h2>
+                <p>Isi data di bawah untuk membuat akun.</p>
+                <form id="formDaftar" novalidate>
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" placeholder="cth: Siti Aisyah" maxlength="60" autocomplete="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="nama@email.com" maxlength="120" autocomplete="email" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Minimal 6 karakter" autocomplete="new-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="konfirmasi">Ulangi Password</label>
+                            <input type="password" id="konfirmasi" name="konfirmasi" placeholder="Ketik ulang" autocomplete="new-password" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tinggi">Tinggi (cm) <span class="opsional">opsional</span></label>
+                            <input type="number" id="tinggi" name="tinggi_cm" placeholder="cth: 165" min="50" max="250" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="berat">Berat (kg) <span class="opsional">opsional</span></label>
+                            <input type="number" id="berat" name="berat_kg" placeholder="cth: 55" min="10" max="300" step="0.1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jk">Jenis Kelamin <span class="opsional">opsional</span></label>
+                            <select id="jk" name="jenis_kelamin">
+                                <option value="">— Pilih —</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lahir">Tanggal Lahir <span class="opsional">opsional</span></label>
+                            <input type="date" id="lahir" name="tanggal_lahir" max="2099-12-31">
+                        </div>
+                    </div>
+                    <p class="form-hint">Tanggal lahir &amp; jenis kelamin dipakai menghitung target air, kalori, langkah, dan tidur yang sesuai umurmu di halaman Kesehatan.</p>
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-user-plus"></i> Buat Akun</button>
+                    <div class="form-msg" id="formMsg"></div>
+                </form>
+                <p class="auth-switch">Sudah punya akun? <a href="masuk">Masuk di sini</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/form-akun.js?v=5"></script>
+</body>
+</html>

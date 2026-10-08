@@ -1,0 +1,23 @@
+{
+  "name": "ai-daily-healthy-assistant",
+  "version": "2.0.0",
+  "description": "AI Daily Healthy Assistant - website kesehatan harian dengan database MySQL",
+  "main": "server.js",
+  "scripts": {
+    "setup": "node setup-db.js",
+    "seed:demo": "node seed-demo.js",
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.5"
+  }
+}
+

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Chat Bot - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/chatbot.css?v=5">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan">Kesehatan</a></li>
+                <li><a href="chatbot" class="active">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <section class="chat-layout">
+        <div class="container">
+            <div class="section-header" style="margin-bottom:30px;">
+                <span class="section-badge"><i class="fas fa-robot"></i> Asisten AI 24/7</span>
+                <h2>Chat Dengan <span class="gradient-text">Dokter AI</span></h2>
+                <p>Masuk ke akunmu, lalu langsung tanya seputar kesehatan. Riwayat chat tersimpan di akunmu.</p>
+            </div>
+
+            <div class="chat-wrapper">
+                <!-- Sidebar -->
+                <aside class="chat-sidebar">
+                    <div class="bot-profile">
+                        <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+                        <h3>HEALTH GUARDIAN</h3>
+                        <span class="status-online"><span class="status-dot"></span> Online — siap membantu</span>
+                    </div>
+
+                    <p class="sidebar-title">Pilih Topik Cepat</p>
+                    <div class="topic-list">
+                        <button type="button" data-q="Halo! Siapa kamu dan apa saja yang bisa kamu bantu?"><i class="fas fa-hand-sparkles"></i> Sapaan & Bantuan</button>
+                        <button type="button" data-q="Saya flu, batuk, dan demam ringan. Apa yang harus dilakukan?"><i class="fas fa-thermometer-half"></i> Gejala Flu & Batuk</button>
+                        <button type="button" data-q="Bagaimana cara diet sehat yang aman?"><i class="fas fa-apple-alt"></i> Tips Diet Sehat</button>
+                        <button type="button" data-q="Saya pemula, olahraga apa yang cocok?"><i class="fas fa-dumbbell"></i> Olahraga Pemula</button>
+                        <button type="button" data-q="Saya susah tidur, sering begadang. Solusinya?"><i class="fas fa-moon"></i> Susah Tidur</button>
+                    </div>
+
+                    <div class="sidebar-note">
+                        <strong><i class="fas fa-info-circle"></i> Catatan:</strong><br>
+                        Percakapan tersimpan di akunmu dan <strong>tidak ditampilkan di panel admin</strong>; admin hanya melihat jumlah pemakaian (token). Untuk konsultasi medis serius, selalu hubungi dokter atau puskesmas terdekat.
+                    </div>
+                </aside>
+
+                <!-- Main chat -->
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <div class="h-avatar"><i class="fas fa-robot"></i></div>
+                        <div>
+                            <h3>HEALTH GUARDIAN</h3>
+                            <p>Asisten kesehatan pribadi • Sehatkan Hidupmu, Sehatkan Masa Depanmu</p>
+                        </div>
+                    </div>
+
+                    <div class="live-label"><i class="fas fa-bolt"></i> Live Chat AI <button type="button" class="link-btn" id="clearChatBtn" hidden>bersihkan riwayat</button></div>
+                    <div class="chat-area live-chat-area" id="liveArea">
+                        <div class="typing" id="liveTyping" style="display:none"><span></span><span></span><span></span></div>
+                    </div>
+
+                    <!-- Hanya tampil jika sudah login -->
+                    <div class="chat-input-area" id="areaInput" hidden>
+                        <div class="suggestion-row">
+                            <button type="button" data-q="Saya flu, batuk, dan demam ringan. Apa yang harus dilakukan?">Flu & batuk?</button>
+                            <button type="button" data-q="Bagaimana cara diet sehat yang aman?">Diet sehat?</button>
+                            <button type="button" data-q="Saya pemula, olahraga apa yang cocok?">Olahraga pemula?</button>
+                            <button type="button" data-q="Saya susah tidur, sering begadang. Solusinya?">Susah tidur?</button>
+                        </div>
+                        <form class="chat-input-box" id="msgForm">
+                            <input type="text" id="msgInput" placeholder="Ketik pertanyaan kesehatan..." maxlength="1000" autocomplete="off">
+                            <button type="submit" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                        <p class="chat-disclaimer"><i class="fas fa-shield-alt"></i> Riwayat chat tersimpan di akunmu • Bukan pengganti diagnosis dokter • "Sehatkan Hidupmu, Sehatkan Masa Depanmu"</p>
+                    </div>
+
+                    <!-- Hanya tampil jika belum login -->
+                    <div class="chat-login" id="areaLogin" hidden>
+                        <p><i class="fas fa-lock"></i> Masuk dulu untuk mulai chat dengan Dokter AI.</p>
+                        <div class="aksi">
+                            <a href="masuk" class="btn btn-secondary">Masuk</a>
+                            <a href="daftar" class="btn btn-primary">Daftar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <a href="kesehatan" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Buka Dashboard Kesehatan</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/chatbot.js?v=5"></script>
+</body>
+</html>

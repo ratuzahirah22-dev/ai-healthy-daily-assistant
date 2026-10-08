@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#10b981">
+    <title>Dashboard Kesehatan - AI Daily Healthy Assistant</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/pages.css?v=7">
+    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <ul class="nav-links">
+                <li><a href="../index">Beranda</a></li>
+                <li><a href="kesehatan" class="active">Kesehatan</a></li>
+                <li><a href="chatbot">Chat Bot</a></li>
+                <li><a href="tentang">Tentang</a></li>
+                <li><a href="jadwal">Jadwal</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" title="Mode Gelap/Terang" aria-label="Mode Gelap/Terang"><i class="fas fa-moon"></i></button>
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Dashboard <span class="gradient-text">Kesehatanmu</span></h1>
+            <p>Pantau BMI, asupan air, aktivitas, tidur, dan kebiasaan sehat harianmu dalam satu tempat.</p>
+            <div class="breadcrumb"><a href="../index">Beranda</a> / Kesehatan</div>
+        </div>
+    </section>
+
+    <!-- Dashboard Cards -->
+    <section class="dashboard">
+        <div class="container">
+            <!-- Tamu (belum login): hanya melihat ajakan masuk, bukan angka palsu -->
+            <div class="auth-box login-wajib" id="loginWajib" hidden>
+                <h2><i class="fas fa-lock"></i> Dashboard Pribadi</h2>
+                <p>Masuk untuk melihat dan mencatat data kesehatanmu: BMI, air minum, langkah, tidur, kalori, detak jantung, dan kebiasaan harian. Datamu tersimpan aman di akunmu.</p>
+                <div class="aksi">
+                    <a href="masuk" class="btn btn-secondary">Masuk</a>
+                    <a href="daftar" class="btn btn-primary">Daftar Gratis</a>
+                </div>
+                <p class="auth-switch">Rekomendasi makanan, jadwal olahraga, dan tips tidur di bawah terbuka untuk semua.</p>
+            </div>
+
+            <!-- Isi dashboard: hanya tampil setelah login & data berhasil dimuat -->
+            <div id="isiDashboard" hidden>
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-chart-line"></i> Ringkasan Hari Ini</span>
+                <h2>Pantauan <span class="gradient-text">Harian</span></h2>
+                <p id="dashSub">Data kesehatanmu hari ini</p>
+                <p id="targetInfo" class="target-info"><i class="fas fa-bullseye"></i> Isi profil (umur & jenis kelamin) agar target dihitung otomatis.</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dash-card" id="card-bmi">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-green"><i class="fas fa-weight"></i></div>
+                        <span class="dash-badge">+ Ideal</span>
+                    </div>
+                    <h3>Indeks Massa Tubuh</h3>
+                    <div class="dash-value">22.4 <small>BMI</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:65%"></div></div>
+                    <p class="dash-note">Berat ideal. Pertahankan pola makan seimbang.</p>
+                </div>
+
+                <div class="dash-card" id="card-air">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-blue"><i class="fas fa-tint"></i></div>
+                        <span class="dash-badge">6 / 8 gelas</span>
+                    </div>
+                    <h3>Asupan Air</h3>
+                    <div class="dash-value">1.5 <small>Liter</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:75%; background: linear-gradient(135deg,#3b82f6,#06b6d4)"></div></div>
+                    <p class="dash-note">Kurang 2 gelas lagi menuju target 2 liter.</p>
+                </div>
+
+                <div class="dash-card" id="card-langkah">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-orange"><i class="fas fa-walking"></i></div>
+                        <span class="dash-badge">Aktif</span>
+                    </div>
+                    <h3>Langkah Hari Ini</h3>
+                    <div class="dash-value">7.842 <small>langkah</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:78%; background: linear-gradient(135deg,#f59e0b,#ef4444)"></div></div>
+                    <p class="dash-note">Target 10.000 langkah. Ayo jalan santai sore ini!</p>
+                </div>
+
+                <div class="dash-card" id="card-tidur">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-purple"><i class="fas fa-moon"></i></div>
+                        <span class="dash-badge">Cukup</span>
+                    </div>
+                    <h3>Kualitas Tidur</h3>
+                    <div class="dash-value">7.2 <small>jam</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:90%; background: linear-gradient(135deg,#8b5cf6,#6366f1)"></div></div>
+                    <p class="dash-note">Tidur nyenyak. Idealnya 7–9 jam per malam.</p>
+                </div>
+
+                <div class="dash-card" id="card-kalori">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-pink"><i class="fas fa-fire"></i></div>
+                        <span class="dash-badge">Defisit sehat</span>
+                    </div>
+                    <h3>Kalori Terbakar</h3>
+                    <div class="dash-value">1.850 <small>kcal</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:60%; background: linear-gradient(135deg,#ec4899,#f43f5e)"></div></div>
+                    <p class="dash-note">Kebutuhan harian ± 2.200 kcal. Jaga asupanmu.</p>
+                </div>
+
+                <div class="dash-card" id="card-detak">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-teal"><i class="fas fa-heart"></i></div>
+                        <span class="dash-badge">Normal</span>
+                    </div>
+                    <h3>Detak Jantung</h3>
+                    <div class="dash-value">72 <small>bpm</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:50%; background: linear-gradient(135deg,#14b8a6,#10b981)"></div></div>
+                    <p class="dash-note">Detak istirahat normal (60–100 bpm).</p>
+                </div>
+                <div class="dash-card" id="card-makan">
+                    <div class="dash-top">
+                        <div class="dash-icon bg-orange"><i class="fas fa-utensils"></i></div>
+                        <span class="dash-badge">0 kcal</span>
+                    </div>
+                    <h3>Kalori Masuk</h3>
+                    <div class="dash-value">0 <small>kcal</small></div>
+                    <div class="progress-bar"><div class="progress-fill" style="--w:0%; background: linear-gradient(135deg,#f59e0b,#f97316)"></div></div>
+                    <p class="dash-note">Belum ada makanan yang dicatat hari ini.</p>
+                </div>
+
+            </div>
+
+            <!-- BMI + Checklist -->
+            <div class="panel-grid">
+                <div class="panel">
+                    <h2><i class="fas fa-calculator"></i> Kalkulator BMI</h2>
+                    <p id="bmiSub">Masukkan tinggi & berat badan untuk mengetahui kategorimu. Hasilnya tersimpan di akunmu.</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bmiTinggi">Tinggi Badan (cm)</label>
+                            <input type="number" id="bmiTinggi" value="170" placeholder="cth: 170" min="50" max="250" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="bmiBerat">Berat Badan (kg)</label>
+                            <input type="number" id="bmiBerat" value="65" placeholder="cth: 65" min="10" max="300" step="0.1">
+                        </div>
+                    </div>
+                    <button type="button" id="btnBmi" class="btn btn-primary" style="width:100%; justify-content:center;">
+                        <i class="fas fa-sync-alt"></i> Hitung BMI
+                    </button>
+                    <div class="form-msg" id="bmiMsg"></div>
+                    <div class="bmi-result">
+                        <div class="bmi-number" id="bmiAngka">22.4</div>
+                        <div class="bmi-status" id="bmiStatus">Berat Ideal</div>
+                        <div class="bmi-scale">
+                            <div class="s1">&lt;18.5</div>
+                            <div class="s2">18.5–24.9</div>
+                            <div class="s3">25–29.9</div>
+                            <div class="s4">≥30</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2><i class="fas fa-tasks"></i> Maintain Harian</h2>
+                    <p id="habitSub">Centang kebiasaan sehat yang sudah kamu lakukan hari ini. Tersimpan otomatis.</p>
+                    <ul class="check-list" id="habitList">
+                        <li><input type="checkbox" checked id="h1"><span for="h1">Minum 8 gelas air putih</span></li>
+                        <li><input type="checkbox" checked id="h2"><span>Olahraga 30 menit</span></li>
+                        <li><input type="checkbox" id="h3"><span>Makan sayur & buah</span></li>
+                        <li><input type="checkbox" id="h4"><span>Tidur sebelum jam 23.00</span></li>
+                        <li><input type="checkbox" checked id="h5"><span>Jalan kaki 5.000+ langkah</span></li>
+                        <li><input type="checkbox" id="h6"><span>Meditasi 10 menit</span></li>
+                        <li><input type="checkbox" id="h7"><span>Tidak minum minuman bersoda</span></li>
+                    </ul>
+                    <div class="habit-score" id="habitScore">
+                        Skor kebiasaanmu hari ini: <strong>3 / 7</strong> — Terus tingkatkan!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input data harian -->
+            <div class="panel panel-penuh form-box" id="panelInput">
+                <h2><i class="fas fa-edit"></i> Catat Data Hari Ini</h2>
+                <p>Isi data kesehatanmu hari ini. Menyimpan lagi di hari yang sama akan memperbarui datanya.</p>
+                <form id="formHarian" novalidate>
+                    <div class="form-row-5">
+                        <div class="form-group">
+                            <label for="inAir">Air (gelas)</label>
+                            <input type="number" id="inAir" name="air_gelas" min="0" max="30" placeholder="cth: 6">
+                        </div>
+                        <div class="form-group">
+                            <label for="inLangkah">Langkah</label>
+                            <input type="number" id="inLangkah" name="langkah" min="0" max="100000" placeholder="cth: 7842">
+                        </div>
+                        <div class="form-group">
+                            <label for="inTidur">Tidur (jam)</label>
+                            <input type="number" id="inTidur" name="tidur_jam" min="0" max="24" step="0.1" placeholder="cth: 7.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="inKalori">Kalori terbakar</label>
+                            <input type="number" id="inKalori" name="kalori" min="0" max="20000" placeholder="cth: 1850">
+                        </div>
+                        <div class="form-group">
+                            <label for="inDetak">Detak (bpm)</label>
+                            <input type="number" id="inDetak" name="detak_jantung" min="0" max="250" placeholder="cth: 72">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Data Hari Ini</button>
+                    <div class="form-msg" id="harianMsg"></div>
+                </form>
+            </div>
+
+
+            <!-- Catat Makanan (tabel resepsi lokal, tanpa AI) -->
+            <div class="panel panel-penuh" id="panelMakan">
+                <h2><i class="fas fa-utensils"></i> Catat Makanan Hari Ini</h2>
+                <p>Pilih makanan lalu masukkan beratnya. Energi dihitung otomatis dari tabel gizi (tanpa memakai AI).</p>
+                <form id="formMakan" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cariMakanan">Makanan</label>
+                            <div class="combo" id="comboMakan">
+                                <i class="fas fa-search combo-ikon"></i>
+                                <input type="text" id="cariMakanan" placeholder="Klik atau ketik nama makanan..." autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="comboList">
+                                <input type="hidden" id="pilihMakanan" value="">
+                                <ul class="combo-list" id="comboList" role="listbox" hidden></ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="jumlahGram">Berat (gram)</label>
+                            <input type="number" id="jumlahGram" name="jumlah_gram" min="1" max="2000" step="1" value="100" required>
+                        </div>
+                    </div>
+                    <p class="form-hint" id="infoMakanan">Pilih makanan untuk melihat takaran lazimnya.</p>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Tambahkan</button>
+                    <div class="form-msg" id="makanMsg"></div>
+                </form>
+                <div class="habit-score" id="totalMakan" style="margin:15px 0;">
+                    Total energi masuk hari ini: <strong>0 kcal</strong>
+                </div>
+                <div class="tabel-geser">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Makanan</th><th>Berat</th><th>Energi</th><th>Aksi</th></tr>
+                        </thead>
+                        <tbody id="makanBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Riwayat 7 hari -->
+            <div class="panel panel-penuh" id="panelRiwayat">
+                <h2><i class="fas fa-history"></i> Riwayat 7 Hari Terakhir</h2>
+                <p>Catatan kesehatanmu dalam seminggu terakhir.</p>
+                <div class="tabel-geser">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th>Tanggal</th><th>Air</th><th>Langkah</th><th>Tidur</th><th>Kalori</th><th>Detak</th></tr>
+                        </thead>
+                        <tbody id="riwayatBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grafik Perkembangan -->
+            <div class="panel panel-penuh">
+                <h2><i class="fas fa-chart-area"></i> Grafik Perkembangan 7 Hari</h2>
+                <p>Pantau tren langkah, jam tidur, dan kalori terbakarmu.</p>
+                <canvas id="grafikKesehatan" style="max-height:320px"></canvas>
+            </div>
+
+            <!-- Pengingat & Ekspor -->
+            <div class="panel panel-penuh">
+                <h2><i class="fas fa-bell"></i> Pengingat & Laporan</h2>
+                <p id="reminderDesc">Muat data hari ini untuk melihat ringkasan kebiasaanmu.</p>
+                <div class="habit-score" id="reminderScore" style="margin-bottom:15px;">
+                    <strong>0 / 7</strong> kebiasaan selesai hari ini.
+                    Aktivasi pengingat agar kamu tidak lupa lengkapi semuanya.
+                </div>
+                <div class="aksi" style="display:flex; gap:12px; flex-wrap:wrap">
+                    <button id="btnPengingat" class="btn btn-primary"><i class="fas fa-glass-water"></i> Aktifkan Pengingat Minum</button>
+                    <button id="btnExport" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Unduh Laporan (PDF)</button>
+                </div>
+                <p id="pengingatMsg" class="msg"></p>
+            </div>
+            </div><!-- /isiDashboard -->
+        </div>
+    </section>
+
+    <!-- Makanan -->
+    <section class="health-section alt" id="makanan">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-utensils"></i> Nutrisi</span>
+                <h2>Rekomendasi <span class="gradient-text">Makanan Sehat</span></h2>
+                <p>Pola makan seimbang dengan gizi lengkap untuk energi sepanjang hari</p>
+            </div>
+            <div class="cards-3">
+                <div class="info-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg,#f59e0b,#ea580c);"><i class="fas fa-egg"></i></div>
+                    <div class="card-body">
+                        <span class="tag tag-orange">Sarapan • 07.00</span>
+                        <h3>Energi Pagi</h3>
+                        <p>Awali hari dengan protein & serat agar kenyang lebih lama.</p>
+                        <ul>
+                            <li>Oatmeal + pisang + madu</li>
+                            <li>Telur rebus + roti gandum</li>
+                            <li>Smoothie bayam + apel</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg,#10b981,#059669);"><i class="fas fa-fish"></i></div>
+                    <div class="card-body">
+                        <span class="tag tag-green">Makan Siang • 12.00</span>
+                        <h3>Gizi Seimbang</h3>
+                        <p>Prinsip Isi Piringku: ½ sayur-buah, ¼ protein, ¼ karbohidrat.</p>
+                        <ul>
+                            <li>Nasi merah + ikan + lalapan</li>
+                            <li>Ayam panggang + brokoli</li>
+                            <li>Tahu tempe + sayur sop</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg,#6366f1,#8b5cf6);"><i class="fas fa-carrot"></i></div>
+                    <div class="card-body">
+                        <span class="tag tag-purple">Makan Malam • 19.00</span>
+                        <h3>Ringan & Bernutrisi</h3>
+                        <p>Makan ringan 3 jam sebelum tidur agar pencernaan optimal.</p>
+                        <ul>
+                            <li>Sup ayam + sayuran</li>
+                            <li>Salad + telur</li>
+                            <li>Pepes ikan + nasi sedikit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Olahraga -->
+    <section class="health-section" id="olahraga">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-dumbbell"></i> Aktivitas Fisik</span>
+                <h2>Jadwal <span class="gradient-text">Olahraga Mingguan</span></h2>
+                <p>Minimal 150 menit aktivitas sedang per minggu menurut WHO</p>
+            </div>
+            <table class="schedule-table">
+                <tr><th>Hari</th><th>Aktivitas</th><th>Durasi</th><th>Level</th></tr>
+                <tr><td><strong>Senin</strong></td><td>Jogging + Stretching</td><td>30 menit</td><td><span class="tag tag-green">Pemula</span></td></tr>
+                <tr><td><strong>Selasa</strong></td><td>Bodyweight (push-up, squat, plank)</td><td>25 menit</td><td><span class="tag tag-blue">Menengah</span></td></tr>
+                <tr><td><strong>Rabu</strong></td><td>Istirahat / Yoga ringan</td><td>20 menit</td><td><span class="tag tag-green">Pemulihan</span></td></tr>
+                <tr><td><strong>Kamis</strong></td><td>Bersepeda / Berenang</td><td>40 menit</td><td><span class="tag tag-blue">Menengah</span></td></tr>
+                <tr><td><strong>Jumat</strong></td><td>Latihan kekuatan (dumbbell)</td><td>30 menit</td><td><span class="tag tag-orange">Lanjutan</span></td></tr>
+                <tr><td><strong>Sabtu</strong></td><td>Senam / Badminton bersama</td><td>45 menit</td><td><span class="tag tag-purple">Fun</span></td></tr>
+                <tr><td><strong>Minggu</strong></td><td>Istirahat total</td><td>—</td><td><span class="tag tag-green">Recovery</span></td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Tidur & Mental -->
+    <section class="health-section alt" id="tidur">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-bed"></i> Istirahat & Pikiran</span>
+                <h2>Tidur & <span class="gradient-text">Kesehatan Mental</span></h2>
+                <p id="mental">Tubuh yang sehat berawal dari istirahat cukup dan pikiran yang tenang</p>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-item"><i class="fas fa-moon"></i><div><h4>Tidur 7–9 Jam</h4><p>Hindari gadget 1 jam sebelum tidur. Buat kamar gelap, sejuk, dan tenang.</p></div></div>
+                <div class="tip-item"><i class="fas fa-coffee"></i><div><h4>Batasi Kafein</h4><p>Hindari kopi/teh setelah jam 14.00 agar tidak mengganggu jam tidur.</p></div></div>
+                <div class="tip-item"><i class="fas fa-brain"></i><div><h4>Meditasi 10 Menit</h4><p>Tarik napas dalam, fokus pada saat ini. Efektif menurunkan stres & cemas.</p></div></div>
+                <div class="tip-item"><i class="fas fa-book-open"></i><div><h4>Jurnal Syukur</h4><p>Tulis 3 hal yang disyukuri setiap malam untuk mental yang lebih positif.</p></div></div>
+                <div class="tip-item"><i class="fas fa-users"></i><div><h4>Terhubung Sosial</h4><p>Luangkan waktu dengan keluarga/teman. Dukungan sosial menjaga kesehatan mental.</p></div></div>
+                <div class="tip-item"><i class="fas fa-laptop"></i><div><h4>Detoks Digital</h4><p>Istirahatkan mata & pikiran dari layar setiap 2 jam sekali.</p></div></div>
+            </div>
+            <div style="text-align:center; margin-top:40px;">
+                <a href="chatbot" class="btn btn-primary btn-lg"><i class="fas fa-comments"></i> Konsultasi via Chat Bot</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 AI Daily Healthy Assistant. Sehatkan Hidupmu, Sehatkan Masa Depanmu.</p>
+                <p style="margin-top:10px;"><a href="../index" style="color:var(--primary-light);">← Kembali ke Beranda</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme.js?v=5"></script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/kesehatan.js?v=7"></script>
+</body>
+</html>
