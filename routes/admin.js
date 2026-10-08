@@ -286,4 +286,85 @@ router.delete('/ulasan/:id', async (req, res) => {
   res.json({ pesan: 'Ulasan dihapus.' });
 });
 
+// ---------- Kelola makanan (tabel gizi untuk fitur Catat Makanan) ----------
+// Data ini dipakai halaman Kesehatan; admin bisa menambah, mengubah, menghapus.
+
+function dataMakanan(m) {
+  return {
+    id: m.id, nama: m.nama, kategori: m.kategori,
+    kcal_per_100g: Number(m.kcal_per_100g),
+    gram_porsi: Number(m.gram_porsi),
+    takaran: m.takaran || ''
+  };
+}
+
+// Validasi masukan makanan. Mengembalikan { nilai } atau { galat }
+function validasiMakanan(b) {
+  const nama = String(b.nama || '').trim();
+  const kategori = String(b.kategori || '').trim();
+  const kcal = angka(b.kcal_per_100g, 0, 2000);
+  const porsi = angka(b.gram_porsi, 1, 2000);
+  const takaran = String(b.takaran || '').trim();
+
+  if (nama.length < 2 || nama.length > 80) return { galat: 'Nama makanan harus 2–80 huruf.' };
+  if (kategori.length < 2 || kategori.length > 30) return { galat: 'Kategori harus 2–30 huruf.' };
+  if (kcal === null || Number.isNaN(kcal)) return { galat: 'Energi harus 0–2.000 kcal per 100 g.' };
+  if (porsi === null || Number.isNaN(porsi)) return { galat: 'Berat porsi harus 1–2.000 gram.' };
+  if (takaran.length > 40) return { galat: 'Keterangan takaran maksimal 40 karakter.' };
+  return { nilai: { nama, kategori, kcal: Math.round(kcal), porsi: Math.round(porsi), takaran } };
+}
+
+// GET /api/admin/makanan  -> seluruh daftar makanan
+router.get('/makanan', async (req, res) => {
+  const [rows] = await db.query('SELECT id, nama, kategori, kcal_per_100g, gram_porsi, takaran FROM foods ORDER BY kategori, nama');
+  res.json({ makanan: rows.map(dataMakanan) });
+});
+
+// POST /api/admin/makanan  -> tambah makanan baru
+router.post('/makanan', async (req, res) => {
+  const v = validasiMakanan(req.body);
+  if (v.galat) return res.status(400).json({ pesan: v.galat });
+
+  const [ada] = await db.query('SELECT id FROM foods WHERE nama = ?', [v.nilai.nama]);
+  if (ada.length) return res.status(409).json({ pesan: 'Makanan dengan nama itu sudah ada.' });
+
+  const [hasil] = await db.query(
+    'INSERT INTO foods (nama, kategori, kcal_per_100g, gram_porsi, takaran) VALUES (?, ?, ?, ?, ?)',
+    [v.nilai.nama, v.nilai.kategori, v.nilai.kcal, v.nilai.porsi, v.nilai.takaran]
+  );
+  const [[baru]] = await db.query('SELECT id, nama, kategori, kcal_per_100g, gram_porsi, takaran FROM foods WHERE id = ?', [hasil.insertId]);
+  res.status(201).json({ pesan: 'Makanan ditambahkan.', makanan: dataMakanan(baru) });
+});
+
+// PUT /api/admin/makanan/:id  -> ubah makanan
+router.put('/makanan/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ pesan: 'ID makanan tidak valid.' });
+  const v = validasiMakanan(req.body);
+  if (v.galat) return res.status(400).json({ pesan: v.galat });
+
+  const [ada] = await db.query('SELECT id FROM foods WHERE id = ?', [id]);
+  if (!ada.length) return res.status(404).json({ pesan: 'Makanan tidak ditemukan.' });
+  const [kembar] = await db.query('SELECT id FROM foods WHERE nama = ? AND id <> ?', [v.nilai.nama, id]);
+  if (kembar.length) return res.status(409).json({ pesan: 'Makanan dengan nama itu sudah ada.' });
+
+  await db.query(
+    'UPDATE foods SET nama = ?, kategori = ?, kcal_per_100g = ?, gram_porsi = ?, takaran = ? WHERE id = ?',
+    [v.nilai.nama, v.nilai.kategori, v.nilai.kcal, v.nilai.porsi, v.nilai.takaran, id]
+  );
+  const [[baru]] = await db.query('SELECT id, nama, kategori, kcal_per_100g, gram_porsi, takaran FROM foods WHERE id = ?', [id]);
+  res.json({ pesan: 'Makanan diperbarui.', makanan: dataMakanan(baru) });
+});
+
+// DELETE /api/admin/makanan/:id  -> hapus makanan
+// Catatan: catatan lama pengguna yang memakai makanan ini ikut terhapus (foreign key ON DELETE CASCADE).
+router.delete('/makanan/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ pesan: 'ID makanan tidak valid.' });
+  const [ada] = await db.query('SELECT id FROM foods WHERE id = ?', [id]);
+  if (!ada.length) return res.status(404).json({ pesan: 'Makanan tidak ditemukan.' });
+  await db.query('DELETE FROM foods WHERE id = ?', [id]);
+  res.json({ pesan: 'Makanan dihapus.' });
+});
+
 module.exports = router;

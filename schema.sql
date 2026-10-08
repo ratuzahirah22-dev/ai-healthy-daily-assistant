@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS foods (
   nama         VARCHAR(80)      NOT NULL,
   kategori     VARCHAR(30)      NOT NULL,
   kcal_per_100g SMALLINT UNSIGNED NOT NULL,          -- energi per 100 gram (USDA & Tabel Gizi Indonesia)
+  gram_porsi   SMALLINT UNSIGNED NOT NULL DEFAULT 100, -- berat porsi lazim (diatur admin)
   takaran      VARCHAR(40)      NOT NULL DEFAULT '', -- contoh takaran lazim, mis. "1 gelas (150 g)"
   UNIQUE KEY uq_foods_nama (nama)
 ) ENGINE=InnoDB;

@@ -220,6 +220,9 @@
     font-size: 0.8rem; font-weight: 600; padding: 6px 14px; cursor: pointer; white-space: nowrap;
 }
 .btn-kecil:hover { background: var(--primary-dark); }
+.btn-kecil.btn-hapus { background: var(--danger); }
+.btn-kecil.btn-hapus:hover { background: #dc2626; }
+.aksi-baris { white-space: nowrap; }
 .admin-section .schedule-table td { font-size: 0.9rem; }
 
 .filter-baris select {

@@ -167,13 +167,18 @@ router.put('/habits/:id', wajibLogin, async (req, res) => {
   res.json({ pesan: 'Tersimpan.' });
 });
 
-// ---------- Catat makanan (nilai resepsi lokal, tanpa AI) ----------
-// GET /api/makanan  -> daftar makanan + nilai Calories per 100 gram
+// ---------- Catat makanan (nilai gizi lokal, tanpa AI) ----------
+// GET /api/makanan  -> daftar makanan + nilai energi per 100 gram
 router.get('/makanan', wajibLogin, async (req, res) => {
-  const [rows] = await db.query('SELECT id, nama, kategori, kcal_per_100g, takaran FROM foods ORDER BY kategori, nama');
+  const [rows] = await db.query('SELECT id, nama, kategori, kcal_per_100g, gram_porsi, takaran FROM foods ORDER BY kategori, nama');
   res.json({
     makanan: rows.map(function (m) {
-      return { id: m.id, nama: m.nama, kategori: m.kategori, kcal_per_100g: Number(m.kcal_per_100g), takaran: m.takaran };
+      return {
+        id: m.id, nama: m.nama, kategori: m.kategori,
+        kcal_per_100g: Number(m.kcal_per_100g),
+        takaran: m.takaran,
+        gram_porsi: Number(m.gram_porsi) // berat porsi lazim, diatur admin
+      };
     })
   });
 });
@@ -181,13 +186,15 @@ router.get('/makanan', wajibLogin, async (req, res) => {
 // POST /api/makanan  body: { makanan_id, jumlah_gram }  -> catat yang dimakan hari ini
 router.post('/makanan', wajibLogin, async (req, res) => {
   const id = Number(req.body.makanan_id);
-  const gram = angka(req.body.jumlah_gram, 1, 2000);
+  let gram = angka(req.body.jumlah_gram, 1, 2000);
 
   if (!Number.isInteger(id)) return res.status(400).json({ pesan: 'Makanan tidak valid.' });
   if (Number.isNaN(gram)) return res.status(400).json({ pesan: 'Jumlah harus antara 1–2.000 gram.' });
 
-  const [f] = await db.query('SELECT id, nama, kcal_per_100g FROM foods WHERE id = ?', [id]);
+  const [f] = await db.query('SELECT id, nama, kcal_per_100g, gram_porsi FROM foods WHERE id = ?', [id]);
   if (!f.length) return res.status(404).json({ pesan: 'Makanan tidak ditemukan.' });
+  // Berat mengikuti porsi lazim makanan yang dipilih (halaman mengirim nilai ini juga)
+  if (gram === null) gram = Number(f[0].gram_porsi) || 100;
 
   // CATATAN: untuk INSERT, mysql2 hanya mengembalikan satu elemen (ResultSetHeader)
   const [hasil] = await db.query(

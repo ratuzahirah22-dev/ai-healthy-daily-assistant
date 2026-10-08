@@ -9,9 +9,9 @@
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#10b981">
     <title>Admin - AI Daily Healthy Assistant</title>
-    <link rel="stylesheet" href="../css/style.css?v=5">
-    <link rel="stylesheet" href="../css/pages.css?v=5">
-    <link rel="stylesheet" href="../css/auth.css?v=5">
+    <link rel="stylesheet" href="../css/style.css?v=9">
+    <link rel="stylesheet" href="../css/pages.css?v=9">
+    <link rel="stylesheet" href="../css/auth.css?v=9">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -63,6 +63,7 @@
                     <button type="button" class="aktif" data-tab="ringkasan"><i class="fas fa-chart-pie"></i> Ringkasan</button>
                     <button type="button" data-tab="pengguna"><i class="fas fa-users"></i> Pengguna &amp; Pemakaian</button>
                     <button type="button" data-tab="ulasan"><i class="fas fa-star"></i> Ulasan <span class="badge-tunggu" id="badgeMenunggu" hidden>0</span></button>
+                    <button type="button" data-tab="makanan"><i class="fas fa-utensils"></i> Makanan</button>
                     <button type="button" data-tab="chatbot"><i class="fas fa-robot"></i> Pengaturan Chatbot</button>
                 </div>
 
@@ -271,6 +272,67 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- ===== TAB 5: MAKANAN ===== -->
+                <div class="tab-isi" id="tab-makanan" hidden>
+                    <div class="auth-box form-box admin-box">
+                        <h2><i class="fas fa-utensils"></i> Kelola Makanan</h2>
+                        <p>Data ini dipakai fitur <strong>Catat Makanan</strong> di halaman Kesehatan. Atur berat porsi agar beratnya otomatis mengikuti makanan yang dipilih pengguna.</p>
+
+                        <form id="formMakananAdmin" novalidate>
+                            <input type="hidden" id="mkId" value="">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="mkNama">Nama makanan</label>
+                                    <input type="text" id="mkNama" placeholder="cth: Nasi putih" maxlength="80" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mkKategori">Kategori</label>
+                                    <input type="text" id="mkKategori" list="daftarKategori" placeholder="cth: Karbohidrat" maxlength="30" required>
+                                    <datalist id="daftarKategori">
+                                        <option value="Karbohidrat"></option>
+                                        <option value="Protein"></option>
+                                        <option value="Sayur"></option>
+                                        <option value="Buah"></option>
+                                        <option value="Cemilan"></option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="mkKalori">Energi (kcal per 100 g)</label>
+                                    <input type="number" id="mkKalori" min="0" max="2000" step="1" placeholder="cth: 155" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mkPorsi">Berat porsi (gram)</label>
+                                    <input type="number" id="mkPorsi" min="1" max="2000" step="1" placeholder="cth: 150" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="mkTakaran">Keterangan takaran <span class="opsional">opsional</span></label>
+                                <input type="text" id="mkTakaran" placeholder="cth: 1 gelas (150 g)" maxlength="40">
+                            </div>
+                            <div class="aksi-admin">
+                                <button type="submit" class="btn btn-primary" id="btnSimpanMakanan"><i class="fas fa-save"></i> Simpan Makanan</button>
+                                <button type="button" class="btn btn-secondary" id="btnBatalMakanan" hidden><i class="fas fa-times"></i> Batal</button>
+                            </div>
+                            <div class="form-msg" id="makananMsg"></div>
+                        </form>
+                    </div>
+
+                    <div class="auth-box form-box admin-box" style="margin-top:1.5rem">
+                        <h2><i class="fas fa-list"></i> Daftar Makanan <span id="jumlahMakanan" class="opsional"></span></h2>
+                        <input type="search" id="cariMakananAdmin" placeholder="Cari makanan..." style="margin-bottom:12px">
+                        <div class="tabel-geser">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr><th>Nama</th><th>Kategori</th><th>Energi/100 g</th><th>Porsi</th><th>Takaran</th><th>Aksi</th></tr>
+                                </thead>
+                                <tbody id="makananBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -286,6 +348,6 @@
 
     <script src="../js/theme.js?v=5"></script>
     <script src="../js/auth.js?v=5"></script>
-    <script src="../js/admin.js?v=5"></script>
+    <script src="../js/admin.js?v=9"></script>
 </body>
 </html>

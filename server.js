@@ -19,6 +19,13 @@ app.use(express.json({ limit: '50kb' }));
 app.use(cookieParser());
 
 // ---- API ----
+// Respons API tidak boleh di-cache browser, agar data (mis. daftar makanan
+// beserta gram porsinya) selalu yang terbaru dan tidak "basi".
+app.use('/api', function (req, res, next) {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 // Batasi percobaan masuk/daftar agar password tidak bisa ditebak terus-menerus
 const batasAuth = rateLimit({
   windowMs: 15 * 60 * 1000,

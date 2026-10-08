@@ -46,6 +46,19 @@ async function main() {
     console.log('[OK] Kolom tanggal_lahir ditambahkan ke tabel users.');
   }
 
+  // Database lama: tambahkan berat porsi makanan (gram_porsi, diatur admin).
+  // Nilai awal diambil dari angka gram di teks takaran, mis. "1 gelas (150 g)" -> 150.
+  const [kolomPorsi] = await conn.query("SHOW COLUMNS FROM ai_healthy.foods LIKE 'gram_porsi'");
+  if (!kolomPorsi.length) {
+    await conn.query('ALTER TABLE ai_healthy.foods ADD COLUMN gram_porsi SMALLINT UNSIGNED NOT NULL DEFAULT 100 AFTER kcal_per_100g');
+    const [daftarMakanan] = await conn.query('SELECT id, takaran FROM ai_healthy.foods');
+    for (const m of daftarMakanan) {
+      const cocok = /(\d+)\s*g\b/i.exec(String(m.takaran || ''));
+      await conn.query('UPDATE ai_healthy.foods SET gram_porsi = ? WHERE id = ?', [cocok ? Number(cocok[1]) : 100, m.id]);
+    }
+    console.log('[OK] Kolom gram_porsi ditambahkan ke tabel foods (' + daftarMakanan.length + ' makanan).');
+  }
+
   // Moderasi ulasan: database lama belum punya kolom status
   const [kolomStatus] = await conn.query("SHOW COLUMNS FROM ai_healthy.testimonials LIKE 'status'");
   if (!kolomStatus.length) {

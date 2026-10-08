@@ -27,7 +27,7 @@ fitur **Daftar, Masuk, dan seluruh data kesehatan tersimpan dinamis di MySQL**.
 | **Target personal (umur & gender)** | Kolom `tanggal_lahir` + `jenis_kelamin` di `users`; server (`kebutuhan.js`) menghitung target air, kalori, langkah, dan tidur sesuai umur/gender, lalu halaman Kesehatan memakainya untuk progress bar & catatan.                                                                             |
 | **Kalkulator BMI sungguhan**       | Menghitung otomatis; hasilnya tersimpan jika sudah login.                                                                                                                                                                                                                                     |
 | **Maintain harian tersimpan**      | Centang kebiasaan tersimpan per pengguna per hari, skor dihitung otomatis.                                                                                                                                                                                                                    |
-| **Dashboard admin**                | `pages/admin.html` dengan 3 tab: **Ringkasan** (total pengguna, aktif hari ini / 7 hari, pengguna chatbot, jumlah pertanyaan, **token terpakai**, grafik 7 hari), **Pengguna &amp; Pemakaian** (pertanyaan dan token per pengguna), **Pengaturan Chatbot**. Admin **tidak** melihat isi chat. |
+| **Dashboard admin**                | `pages/admin.html` dengan 5 tab: **Ringkasan** (total pengguna, aktif hari ini / 7 hari, pengguna chatbot, jumlah pertanyaan, **token terpakai**, grafik 7 hari), **Pengguna &amp; Pemakaian** (pertanyaan dan token per pengguna), **Ulasan**, **Makanan** (kelola tabel gizi), **Pengaturan Chatbot**. Admin **tidak** melihat isi chat. |
 | **Chat wajib login**               | Satu form chat di `pages/chatbot.html`; tamu hanya melihat ajakan masuk. Topik cepat langsung mengirim pertanyaan.                                                                                                                                                                            |
 | **Chatbot AI diatur admin**        | `pages/admin.html`: admin mengisi API key, model, prompt, lalu mengaktifkan chatbot. Pengguna cukup login dan langsung chat, tanpa API key.                                                                                                                                                   |
 | **Riwayat chat tersimpan**         | Live Chat AI menyimpan percakapan pengguna yang login.                                                                                                                                                                                                                                        |
@@ -136,7 +136,7 @@ Pengaturan database ada di file **`.env`** (salin dari `.env.example` bila belum
 | `chat_messages`    | Riwayat chat Dokter AI                                                                                                                                         |
 | `chat_usage`       | Pemakaian token per jawaban AI (user, model, token prompt/jawaban/total). Terpisah dari riwayat chat, jadi tetap tercatat walau pengguna menghapus chat-nya    |
 | `chatbot_settings` | Pengaturan Chatbot AI dari admin (API key, model, prompt, aktif/nonaktif)                                                                                      |
-| `foods`            | Tabel makanan lokal (nama, kategori, kcal per 100 g, takaran lazim). **Data statis, bukan AI** — dipakai fitur Catat Makanan                          |
+| `foods`            | Tabel makanan lokal (nama, kategori, kcal per 100 g, **berat porsi `gram_porsi`**, takaran lazim). Dikelola admin lewat tab **Makanan**; bukan AI — dipakai fitur Catat Makanan |
 | `food_logs`        | Catatan makanan yang dimakan pengguna per hari (user, makanan, tanggal, jumlah gram)                                                                           |
 | `testimonials`     | Ulasan pengguna (1 per pengguna) dengan status moderasi: `menunggu` / `draft` / `diterima` / `ditolak`. Hanya `diterima` yang tampil publik di beranda                     |
 | `subscribers`      | Email newsletter                                                                                                                                               |
@@ -157,9 +157,13 @@ Pengaturan database ada di file **`.env`** (salin dari `.env.example` bila belum
 | `PUT /api/health/today`                   | ✔      | Simpan data hari ini                                                         |
 | `POST /api/bmi`                           | ✔      | Hitung &amp; simpan BMI                                                      |
 | `PUT /api/habits/:id`                     | ✔      | Centang / batal centang kebiasaan                                            |
-| `GET /api/makanan`                        | ✔      | Daftar makanan + nilai kcal per 100 g (tabel lokal, tanpa AI)               |
+| `GET /api/makanan`                        | ✔      | Daftar makanan + kcal per 100 g + berat porsi (tabel lokal, tanpa AI)        |
 | `POST /api/makanan`                       | ✔      | Catat makanan dimakan (body: `makanan_id`, `jumlah_gram`)                    |
 | `DELETE /api/makanan/:id`                 | ✔      | Hapus satu catatan makanan hari ini                                          |
+| `GET /api/admin/makanan`                  | admin  | Daftar seluruh makanan (tabel gizi)                                          |
+| `POST /api/admin/makanan`                 | admin  | Tambah makanan (nama, kategori, kcal/100 g, berat porsi, takaran)            |
+| `PUT /api/admin/makanan/:id`              | admin  | Ubah makanan                                                                 |
+| `DELETE /api/admin/makanan/:id`           | admin  | Hapus makanan (catatan lama yang memakainya ikut terhapus)                   |
 | `GET /api/jadwal`                         | ✔      | Jadwal hari ini + daftar jadwal sekali yang akan datang                      |
 | `POST /api/jadwal`                        | ✔      | Tambah jadwal (judul, waktu, kategori, ulangi, tanggal/hari)                 |
 | `PUT /api/jadwal/:id/selesai`             | ✔      | Tandai selesai / batal untuk hari ini                                        |
@@ -453,9 +457,21 @@ Pemilihan makanan memakai **combobox**: klik kolom makanan → daftar
 terbuka (dikelompokkan per kategori, menampilkan kcal/100 g) → ketik
 untuk menyaring langsung (nama **atau** kategori, mis. "nasi" atau
 "buah"). Bisa dipilih dengan klik atau keyboard (panah atas/bawah,
-Enter memilih, Esc menutup). Bila hanya satu hasil, tetap ditampilkan
-untuk dipilih. Bila tidak ada yang cocok muncul pesan. Pilihan
-disimpan di input tersembunyi `#pilihMakanan`.
+Enter memilih, Esc menutup). Bila tidak ada yang cocok muncul pesan.
+Pilihan disimpan di input tersembunyi `#pilihMakanan`.
+
+**Berat otomatis (tidak bisa diubah).** Kolom berat diisi otomatis dari
+`gram_porsi` makanan yang dipilih (disimpan di tabel `foods`) dan bersifat
+`readonly`; server juga memakai `gram_porsi` bila berat tidak dikirim. Jadi
+pengguna tidak perlu menebak beratnya.
+
+**Berat porsi diatur admin.** Tab **Makanan** di `pages/admin.html` bisa
+menambah / mengubah / menghapus makanan: nama, kategori, energi per 100 g,
+**berat porsi (gram)**, dan keterangan takaran. Daftar bisa dicari, tombol
+Ubah mengisi form, tombol hapus meminta konfirmasi (catatan pengguna yang
+memakai makanan itu ikut terhapus karena foreign key). Perubahan langsung
+berlaku di halaman Kesehatan. Database lama: `npm run setup` menambahkan
+kolom `gram_porsi` dan mengisinya dari angka gram pada teks takaran.
 Energi dihitung di server dengan rumus
 `(kcal per 100 g × gram) / 100`. Catatan tersimpan per hari di
 tabel `food_logs`, bisa dihapus per baris, dan totalnya tampil di

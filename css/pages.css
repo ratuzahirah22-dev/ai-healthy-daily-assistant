@@ -400,6 +400,17 @@
     margin: -6px 0 14px;
 }
 
+/* Field berat makanan: hanya-baca, nilainya ikut porsi makanan */
+input[readonly] {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+[data-theme="dark"] input[readonly] {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-light);
+}
+
 /* Combobox makanan (pencarian menyatu di dalam dropdown) */
 .combo { position: relative; }
 .combo > input[type="text"] { padding-left: 40px; }

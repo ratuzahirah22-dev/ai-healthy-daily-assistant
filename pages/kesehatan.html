@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#10b981">
     <title>Dashboard Kesehatan - AI Daily Healthy Assistant</title>
     <link rel="stylesheet" href="../css/style.css?v=5">
-    <link rel="stylesheet" href="../css/pages.css?v=7">
+    <link rel="stylesheet" href="../css/pages.css?v=8">
     <link rel="stylesheet" href="../css/auth.css?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -249,11 +249,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="jumlahGram">Berat (gram)</label>
-                            <input type="number" id="jumlahGram" name="jumlah_gram" min="1" max="2000" step="1" value="100" required>
+                            <label for="jumlahGram">Berat (gram) <span class="opsional">otomatis</span></label>
+                            <input type="number" id="jumlahGram" placeholder="Ikut makanan" readonly>
                         </div>
                     </div>
-                    <p class="form-hint" id="infoMakanan">Pilih makanan untuk melihat takaran lazimnya.</p>
+                    <p class="form-hint" id="infoMakanan">Berat mengikuti porsi lazim makanan yang kamu pilih.</p>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Tambahkan</button>
                     <div class="form-msg" id="makanMsg"></div>
                 </form>
@@ -415,6 +415,6 @@
     <script src="../js/theme.js?v=5"></script>
     <script src="../js/auth.js?v=5"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/kesehatan.js?v=7"></script>
+    <script src="../js/kesehatan.js?v=8"></script>
 </body>
 </html>

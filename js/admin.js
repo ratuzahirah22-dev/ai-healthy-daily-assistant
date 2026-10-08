@@ -32,6 +32,7 @@
       if (tombol.dataset.tab === 'ringkasan') muatRingkasan();
       if (tombol.dataset.tab === 'pengguna') muatPengguna();
       if (tombol.dataset.tab === 'ulasan') muatUlasan();
+      if (tombol.dataset.tab === 'makanan') muatMakananAdmin();
     });
   });
 
@@ -389,4 +390,113 @@
       $('tolakPesan').textContent = err.message;
     }
   });
+
+  // ---------- Kelola Makanan ----------
+  let daftarMakananAdmin = [];
+
+  function gambarBarisMakanan() {
+    const kata = ($('cariMakananAdmin') ? $('cariMakananAdmin').value : '').trim().toLowerCase();
+    const daftar = daftarMakananAdmin.filter(function (m) {
+      return !kata || m.nama.toLowerCase().indexOf(kata) >= 0 || m.kategori.toLowerCase().indexOf(kata) >= 0;
+    });
+    $('makananBody').innerHTML = daftar.length
+      ? daftar.map(function (m) {
+          return '<tr><td><strong>' + App.esc(m.nama) + '</strong></td>' +
+            '<td>' + App.esc(m.kategori) + '</td>' +
+            '<td>' + angka(m.kcal_per_100g) + ' kcal</td>' +
+            '<td>' + angka(m.gram_porsi) + ' g</td>' +
+            '<td>' + App.esc(m.takaran || '—') + '</td>' +
+            '<td class="aksi-baris">' +
+              '<button class="btn btn-kecil" type="button" data-ubah="' + m.id + '"><i class="fas fa-pen"></i> Ubah</button> ' +
+              '<button class="btn btn-kecil btn-hapus" type="button" data-hapus="' + m.id + '"><i class="fas fa-trash"></i></button>' +
+            '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="6" class="kosong">Tidak ada makanan yang cocok.</td></tr>';
+    $('jumlahMakanan').textContent = '(' + daftarMakananAdmin.length + ' makanan)';
+  }
+
+  async function muatMakananAdmin() {
+    try {
+      const d = await App.api('/api/admin/makanan');
+      daftarMakananAdmin = d.makanan;
+      gambarBarisMakanan();
+    } catch (err) {
+      $('makananMsg').textContent = err.message;
+    }
+  }
+
+  function resetFormMakanan() {
+    $('mkId').value = '';
+    $('mkNama').value = '';
+    $('mkKategori').value = '';
+    $('mkKalori').value = '';
+    $('mkPorsi').value = '';
+    $('mkTakaran').value = '';
+    $('btnBatalMakanan').hidden = true;
+  }
+
+  const formMakananAdmin = $('formMakananAdmin');
+  if (formMakananAdmin) {
+    formMakananAdmin.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const msg = $('makananMsg');
+      const id = $('mkId').value;
+      const body = {
+        nama: $('mkNama').value,
+        kategori: $('mkKategori').value,
+        kcal_per_100g: $('mkKalori').value,
+        gram_porsi: $('mkPorsi').value,
+        takaran: $('mkTakaran').value
+      };
+      try {
+        const r = id
+          ? await App.api('/api/admin/makanan/' + id, 'PUT', body)
+          : await App.api('/api/admin/makanan', 'POST', body);
+        App.tampilPesan(msg, r.pesan, true);
+        resetFormMakanan();
+        muatMakananAdmin();
+      } catch (err) {
+        App.tampilPesan(msg, err.message, false);
+      }
+    });
+
+    $('btnBatalMakanan').addEventListener('click', resetFormMakanan);
+
+    if ($('cariMakananAdmin')) $('cariMakananAdmin').addEventListener('input', gambarBarisMakanan);
+
+    $('makananBody').addEventListener('click', async function (e) {
+      const ubah = e.target.closest('[data-ubah]');
+      const hapus = e.target.closest('[data-hapus]');
+      const msg = $('makananMsg');
+
+      if (ubah) {
+        const m = daftarMakananAdmin.filter(function (x) { return String(x.id) === ubah.getAttribute('data-ubah'); })[0];
+        if (!m) return;
+        $('mkId').value = m.id;
+        $('mkNama').value = m.nama;
+        $('mkKategori').value = m.kategori;
+        $('mkKalori').value = m.kcal_per_100g;
+        $('mkPorsi').value = m.gram_porsi;
+        $('mkTakaran').value = m.takaran || '';
+        $('btnBatalMakanan').hidden = false;
+        $('mkNama').focus();
+        msg.textContent = 'Mengubah: ' + m.nama + '. Klik Simpan setelah diubah.';
+        return;
+      }
+
+      if (hapus) {
+        const m = daftarMakananAdmin.filter(function (x) { return String(x.id) === hapus.getAttribute('data-hapus'); })[0];
+        if (!m) return;
+        if (!window.confirm('Hapus "' + m.nama + '"? Catatan makanan pengguna yang memakai makanan ini juga akan terhapus.')) return;
+        try {
+          const r = await App.api('/api/admin/makanan/' + m.id, 'DELETE');
+          App.tampilPesan(msg, r.pesan, true);
+          if ($('mkId').value === String(m.id)) resetFormMakanan();
+          muatMakananAdmin();
+        } catch (err) {
+          App.tampilPesan(msg, err.message, false);
+        }
+      }
+    });
+  }
 })();

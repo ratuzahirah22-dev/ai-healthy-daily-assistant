@@ -220,7 +220,9 @@
     if (!m) return;
     $('pilihMakanan').value = m.id;
     $('cariMakanan').value = m.nama;
-    $('infoMakanan').textContent = 'Energi ' + m.kcal_per_100g + ' kcal per 100 g · takaran lazim: ' + m.takaran;
+    // Berat otomatis mengikuti porsi lazim makanan (tidak bisa diubah manual)
+    $('jumlahGram').value = m.gram_porsi || 100;
+    $('infoMakanan').textContent = 'Porsi lazim: ' + m.takaran + ' · energi ' + m.kcal_per_100g + ' kcal/100 g';
     tutupCombo();
   }
 
@@ -281,12 +283,11 @@
 
       // Mengetik -> saring daftar. Bila teks diubah, pilihan sebelumnya dibatalkan.
       inputCari.addEventListener('input', function () {
-        if ($('pilihMakanan').value) {
-          const m = makananTerpilih();
-          if (!m || m.nama.toLowerCase() !== inputCari.value.trim().toLowerCase()) {
-            $('pilihMakanan').value = '';
-            $('infoMakanan').textContent = 'Pilih makanan untuk melihat takaran lazimnya.';
-          }
+        const m = makananTerpilih();
+        if (!m || m.nama.toLowerCase() !== inputCari.value.trim().toLowerCase()) {
+          $('pilihMakanan').value = '';
+          $('jumlahGram').value = ''; // berat juga direset sampai makanan dipilih
+          $('infoMakanan').textContent = 'Berat mengikuti porsi lazim makanan yang kamu pilih.';
         }
         bukaCombo();
       });
@@ -347,7 +348,6 @@
       try {
         const r = await App.api('/api/makanan', 'POST', { makanan_id: Number(id), jumlah_gram: gram });
         App.tampilPesan(msg, r.pesan + ' (' + r.kcal + ' kcal)', true);
-        $('jumlahGram').value = 100;
         muatDashboard();
       } catch (err) {
         App.tampilPesan(msg, err.message, false);
