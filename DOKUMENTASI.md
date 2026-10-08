@@ -22,7 +22,7 @@ fitur **Daftar, Masuk, dan seluruh data kesehatan tersimpan dinamis di MySQL**.
 | Fitur                              | Keterangan                                                                                                                                                                                                                                                                                    |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Daftar &amp; Masuk**             | `pages/daftar.html`, `pages/masuk.html`. Password disimpan terenkripsi (bcrypt), login memakai cookie `httpOnly` (JWT).                                                                                                                                                                       |
-| **Dashboard dinamis**              | 6 kartu pantauan (BMI, air, langkah, tidur, kalori, detak jantung) diambil dari database.                                                                                                                                                                                                     |
+| **Dashboard dinamis**              | 7 kartu pantauan (BMI, air, langkah, tidur, kalori, detak jantung, kalori masuk) diambil dari database.                                                                                                                                                                                        |
 | **Catat data harian**              | Form "Catat Data Hari Ini" + tabel **riwayat 7 hari.**                                                                                                                                                                                                                                        |
 | **Target personal (umur & gender)** | Kolom `tanggal_lahir` + `jenis_kelamin` di `users`; server (`kebutuhan.js`) menghitung target air, kalori, langkah, dan tidur sesuai umur/gender, lalu halaman Kesehatan memakainya untuk progress bar & catatan.                                                                             |
 | **Kalkulator BMI sungguhan**       | Menghitung otomatis; hasilnya tersimpan jika sudah login.                                                                                                                                                                                                                                     |
@@ -38,6 +38,8 @@ fitur **Daftar, Masuk, dan seluruh data kesehatan tersimpan dinamis di MySQL**.
 | **Pengingat minum air**            | Tombol di halaman Kesehatan memicu Notification browser tiap 1 jam (perlu izin; pengingat tidak disimpan ke database).                                                                                                                                                    |
 | **Reset password pengguna**        | Admin dapat menyetel ulang password pengguna dari tab **Pengguna &amp; Pemakaian** (`POST /api/admin/pengguna/:id/reset-password`). Admin tidak bisa mereset passwordnya sendiri lewat jalur ini.                                                                          |
 | **Jadwal Hari Ini**                | `pages/jadwal.html`. Pengingat & jadwal kegiatan pengguna: **sekali**, **setiap hari**, atau **mingguan**. Ada ringkasan (total / selesai / belum / berikutnya), timeline hari ini, daftar jadwal mendatang, dan **pengingat notifikasi browser** saat waktunya tiba. Wajib login. |
+| **Berat porsi makanan otomatis**   | Di halaman Kesehatan, kolom berat pada "Catat Makanan" **terisi otomatis** mengikuti **porsi lazim** makanan (`gram_porsi`, `readonly`); server memakai porsi lazim bila berat tidak dikirim. |
+| **Kelola makanan (admin)**         | Tab **Makanan** di `pages/admin.html`: admin bisa menambah / mengubah / menghapus makanan (nama, kategori, energi per 100 g, **berat porsi**, takaran), dengan pencarian & konfirmasi hapus. Database lama: `npm run setup` menambah kolom `gram_porsi` otomatis. |
 
 
 Pengunjung yang **belum login** tidak melihat angka apa pun di dashboard Kesehatan — hanya ajakan
@@ -256,10 +258,16 @@ atau dari komputer lokal (`npm start`).
 > `js/*.js` dikirim server dengan `Cache-Control: public, max-age=14400` (4 jam),
 > jadi browser bisa masih memakai salinan lama meski file di server sudah baru
 > (gejala: perbaikan **tidak terlihat di HP** padahal sudah di-upload). Karena
-> itu semua tautan CSS/JS di file HTML memakai **versi**: `css/style.css?v=4`,
-> `js/auth.js?v=4`, dst. Halaman HTML sendiri ber-`max-age=0` (selalu dicek ulang),
-> jadi **setiap kali mengubah CSS/JS, naikkan angka versinya** (mis. `?v=5`) agar
-> pengunjung langsung memuat file terbaru tanpa perlu menghapus cache manual.
+> itu semua tautan CSS/JS di file HTML memakai **versi**, dan **tiap file punya
+> versinya sendiri** — mis. `css/style.css?v=5`, `css/pages.css?v=8`,
+> `js/jadwal.js?v=5`, `js/kesehatan.js?v=8`. Halaman HTML sendiri ber-`max-age=0`
+> (selalu dicek ulang), jadi **setiap kali mengubah sebuah CSS/JS, naikkan angka
+> versi file itu saja** (mis. `?v=9`) agar pengunjung langsung memuat file
+> terbaru tanpa perlu menghapus cache manual.
+>
+> Respons **API** (`/api/...`) dikirim dengan `Cache-Control: no-store` (dipasang
+> di `server.js`), sehingga data dinamis — mis. daftar makanan beserta
+> `gram_porsi`-nya — selalu diambil terbaru dan tidak "basi" di browser.
 
 > Catatan: bagian-bagian di bawah ini adalah dokumentasi versi awal (HTML + CSS murni).
 > Bagian "Keterbatasan" sudah teratasi di versi 2.0.
